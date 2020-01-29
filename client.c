@@ -3,13 +3,27 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-int main()
+int main(int argc, char **argv)
 {
-    int sockfd, connect_return;
+    int sockfd, connect_return, opt=-1;
+    char feed_addr[200];
     int recieved_bytes, sent_bytes;
     struct sockaddr_in server_addr;
 
     char buff[90];
+
+
+    while ((opt = getopt(argc, argv, "m:a:")) != -1) {
+        switch (opt) {
+            case 'm':
+                snprintf( buff, 90, "%s", optarg );
+                break;
+
+            case 'a':
+                snprintf( feed_addr, 200, "%s", optarg );
+                break;
+        }
+    }
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1) {
@@ -19,7 +33,7 @@ int main()
 
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(3388);
-    server_addr.sin_addr.s_addr = inet_addr("172.16.53.80");
+    server_addr.sin_addr.s_addr = inet_addr(feed_addr);
     connect_return = connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr));
     if (connect_return == -1) {
         printf("\nFailed to Connect to server\n");
@@ -28,9 +42,6 @@ int main()
     }
 
     while (1) {
-        printf("\nEnter Text\n");
-        scanf("%s", buff);
-
         sent_bytes = send(sockfd, buff, sizeof(buff), 0);
         if (sent_bytes == -1) {
             printf("\nCoudn't send bytes\n");
