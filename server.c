@@ -40,7 +40,7 @@ int main()
     }
 
     server_addr.sin_family=AF_INET;
-    server_addr.sin_port=htons(3388);
+    server_addr.sin_port=htons(8000);
     server_addr.sin_addr.s_addr=htons(INADDR_ANY);
     bind_return = choose_valid_port(sockfd, server_addr, 10);
 
