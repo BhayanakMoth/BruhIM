@@ -30,7 +30,9 @@ int main(int argc, char **argv)
                 sprintf( feed_addr, "%s", optarg );
                 break;
 
-            case ''
+            case '':
+            	printf("False params");
+
         }
     }
 
@@ -52,7 +54,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (initiated)
+    if (initiated) {
         sent_bytes = send(sockfd, buff, sizeof(buff), 0);
         if (sent_bytes == -1) {
             printf("\n[B_TRANS:000] Coudn't send bytes\n");
